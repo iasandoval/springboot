@@ -1,15 +1,46 @@
 <!doctype html>
-<html ng-app="greetings">
+<html ng-app="CommentsModule">
 <head>
     <title>Hello AngularJS</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-    <script src="hello.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-resource.min.js"></script>
+    <script src="modules/comments.client.module.js"></script>
 </head>
 
 <body>
-<div ng-controller="Hello">
-    <p>The ID is {{greeting.id}}</p>
-    <p>The content is {{greeting.content}}</p>
+<div ng-controller="CommentsController">
+
+    <p>{{message}}</p>
+
+    <p>Find Comment</p>
+    <input type="text" name="id">
+    <button type="submit" ng-click="getCommentById()" >
+        Find Comment
+    </button>
+
+    <p>Id: {{comment.id}}</p>
+    <p>Comment: {{comment.comment}}</p>
+    <p>Date: {{comment.date}}</p>
+
+    <hr>
+
+    <textarea name="comment" rows="2" ng-model="comment.comment"></textarea>
+    <button type="submit" ng-click="addComment()" >
+        Add Comment
+    </button>
+
+    <p ng-show="loadingComments">Loading Comments...</p>
+    <p ng-show="saving">Saving Comment...</p>
+
+    <div ng-repeat="c in comments">
+
+        <p>Id: {{c.id}}</p>
+        <p>Comment: {{c.comment}}</p>
+        <p>Date: {{c.date}}</p>
+
+        <hr>
+    </div>
+
 </div>
 </body>
 </html>

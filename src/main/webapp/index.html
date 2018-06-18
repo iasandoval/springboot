@@ -13,7 +13,7 @@
     <p>{{message}}</p>
 
     <p>Find Comment</p>
-    <input type="text" name="id">
+    <input type="text" name="id" ng-model="comment.id">
     <button type="submit" ng-click="getCommentById()" >
         Find Comment
     </button>
@@ -23,24 +23,33 @@
     <p>Date: {{comment.date}}</p>
 
     <hr>
+    <form name="commentForm" method="post" novalidate>
+        <textarea name="comment" rows="2" ng-model="comment.comment"></textarea>
+        <button type="submit" ng-click="addComment()" >
+            Add Comment
+        </button>
+    </form>
 
-    <textarea name="comment" rows="2" ng-model="comment.comment"></textarea>
-    <button type="submit" ng-click="addComment()" >
-        Add Comment
+    <button type="submit" ng-click="loadComments()" >
+        Load Comments
     </button>
 
-    <p ng-show="loadingComments">Loading Comments...</p>
-    <p ng-show="saving">Saving Comment...</p>
-
-    <div ng-repeat="c in comments">
-
-        <p>Id: {{c.id}}</p>
-        <p>Comment: {{c.comment}}</p>
-        <p>Date: {{c.date}}</p>
-
-        <hr>
-    </div>
-
+        <table border="1" ng-show="listComments.length > 0">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Comment</td>
+                    <td>Date</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="c in listComments">
+                    <td>{{c.id}}</td>
+                    <td>{{c.comment}}</td>
+                    <td>{{c.date}}</td>
+                </tr>
+            </tbody>
+        </table>
 </div>
 </body>
 </html>

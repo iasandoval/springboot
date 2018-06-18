@@ -13,10 +13,10 @@ commentsModule.factory('CommentById', ['$resource', function ($resource) {
 commentsModule.controller('CommentsController', ['$scope', 'Comments', 'CommentById',function ($scope, Comments, CommentById) {
 
     $scope.message = '';
+    $scope.comment = new Comments();
 
     $scope.addComment = function() {
-        $scope.comment = new Comments();
-        $scope.saving = true;
+        $scope.message = 'Saving comment...';
 
         $scope.comment.$save(function (response) {
             if (response) {
@@ -24,36 +24,40 @@ commentsModule.controller('CommentsController', ['$scope', 'Comments', 'CommentB
             } else {
                 $scope.message = 'Error!';
             }
-            $scope.saving = false;
         });
     };
 
     $scope.loadComments = function() {
-        $scope.loadingComments = true;
+        $scope.message = 'Loading comments...';
 
-        var listComments = Comments.get(function () {
+        var listComments = Comments.query({}, function () {
             if (listComments) {
                 $scope.listComments = listComments;
-                $scope.message = 'Comments loaded!';
+
+
+                if($scope.listComments.length == 0) {
+                    $scope.message = 'No Comments!';
+                } else {
+                    $scope.message = 'Comments loaded: ' + $scope.listComments.length ;
+                }
+
             } else {
-                $scope.message = 'There are no comments...';
+                $scope.message = 'Error!';
             }
-            $scope.loadingComments = false;
         });
     };
 
     $scope.getCommentById = function() {
 
-        $scope.loadingComments = true;
+        $scope.message = 'Get comment...';
 
-        var comment = CommentById.get({commentId: $scope.id}, function () {
+        var comment = CommentById.get({commentId: $scope.comment.id}, function () {
             if (comment) {
                 $scope.comment = comment;
                 $scope.message = 'Comment found!';
             } else {
                 $scope.message = 'Comment not found';
             }
-            $scope.loadingComments = false;
         });
     };
 

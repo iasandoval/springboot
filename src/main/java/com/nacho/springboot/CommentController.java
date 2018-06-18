@@ -20,16 +20,16 @@ public class CommentController {
     }
 
     @GetMapping("/{id}")
-    public Comment commentById(@PathVariable Long id) {
+    public Comment commentById(@PathVariable("id") Long id) {
         return this.commentList.get(id);
     }
 
     @PostMapping
-    public Comment addComment(@RequestBody String comment) {
+    public Comment addComment(@RequestBody Comment comment) {
         Comment c = null;
-        if(!StringUtils.isEmpty(comment)){
+        if(!StringUtils.isEmpty(comment.getComment())){
             Long id = this.idComment.incrementAndGet();
-            c = new Comment(id, comment, new Date());
+            c = new Comment(id, comment.getComment(), new Date());
             this.commentList.put(id, c);
         }
         return c;

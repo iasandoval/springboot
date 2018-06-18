@@ -15,14 +15,14 @@ commentsModule.controller('CommentsController', ['$scope', 'Comments', 'CommentB
     $scope.message = '';
     $scope.comment = new Comments();
 
-    $scope.addComment = function() {
+    $scope.addUpdateComment = function() {
         $scope.message = 'Saving comment...';
 
         $scope.comment.$save(function (response) {
             if (response) {
                 $scope.message = 'Everything cool!';
-            } else {
-                $scope.message = 'Error!';
+                $scope.comment = new Comments();
+                $scope.loadComments();
             }
         });
     };
@@ -34,15 +34,12 @@ commentsModule.controller('CommentsController', ['$scope', 'Comments', 'CommentB
             if (listComments) {
                 $scope.listComments = listComments;
 
-
                 if($scope.listComments.length == 0) {
                     $scope.message = 'No Comments!';
                 } else {
                     $scope.message = 'Comments loaded: ' + $scope.listComments.length ;
                 }
 
-            } else {
-                $scope.message = 'Error!';
             }
         });
     };
@@ -52,11 +49,27 @@ commentsModule.controller('CommentsController', ['$scope', 'Comments', 'CommentB
         $scope.message = 'Get comment...';
 
         var comment = CommentById.get({commentId: $scope.comment.id}, function () {
-            if (comment) {
+            if (comment.id) {
                 $scope.comment = comment;
                 $scope.message = 'Comment found!';
             } else {
+                $scope.comment = new Comment();
                 $scope.message = 'Comment not found';
+            }
+        });
+    };
+
+    $scope.deleteComment = function() {
+
+        $scope.message = 'Deleting comment...';
+
+        var comment = CommentById.remove({commentId: $scope.comment.id}, function () {
+            if (comment) {
+                $scope.message = 'Comment Deleted!';
+                $scope.comment = new Comments();
+                $scope.loadComments();
+            } else {
+                $scope.message = 'Comment not deleted';
             }
         });
     };

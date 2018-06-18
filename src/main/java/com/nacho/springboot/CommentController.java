@@ -1,38 +1,41 @@
 package com.nacho.springboot;
 
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
 
-    private final AtomicLong idComment = new AtomicLong();
-    private final Map<Long, Comment> commentList = new HashMap<>();
-
+    @Autowired
+    private CommentsRepository commentsRepository;
 
     @GetMapping
     public List<Comment> listComments() {
-        return new ArrayList(this.commentList.values());
+        return this.commentsRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public Comment commentById(@PathVariable("id") Long id) {
-        return this.commentList.get(id);
+        return this.commentsRepository.findById(id);
     }
 
     @PostMapping
-    public Comment addComment(@RequestBody Comment comment) {
-        Comment c = null;
-        if(!StringUtils.isEmpty(comment.getComment())){
-            Long id = this.idComment.incrementAndGet();
-            c = new Comment(id, comment.getComment(), new Date());
-            this.commentList.put(id, c);
+    public Comment upsertComment(@RequestBody Comment comment) {
+        Comment c;
+        if(comment.getId() > 0) {
+            c = this.commentsRepository.update(comment);
+        } else {
+            c = this.commentsRepository.add(comment);
         }
-        return c;
+       return c;
+    }
+
+    @DeleteMapping("/{id}")
+    public Comment addComment(@PathVariable("id") Long id) {
+        return this.commentsRepository.delete(id);
     }
 
 }

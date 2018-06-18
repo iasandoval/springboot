@@ -10,46 +10,49 @@
 <body>
 <div ng-controller="CommentsController">
 
-    <p>{{message}}</p>
-
     <p>Find Comment</p>
     <input type="text" name="id" ng-model="comment.id">
-    <button type="submit" ng-click="getCommentById()" >
+    <button type="submit" ng-click="getCommentById()">
         Find Comment
     </button>
 
-    <p>Id: {{comment.id}}</p>
-    <p>Comment: {{comment.comment}}</p>
-    <p>Date: {{comment.date}}</p>
-
     <hr>
     <form name="commentForm" method="post" novalidate>
+        <p>Id: {{comment.id}}</p>
+        <p>Date: {{comment.date}}</p>
+        <input type="hidden" name="id" ng-model="comment.id">
+        <input type="hidden" name="date" ng-model="comment.date">
         <textarea name="comment" rows="2" ng-model="comment.comment"></textarea>
-        <button type="submit" ng-click="addComment()" >
-            Add Comment
+        <button type="submit" ng-click="addUpdateComment()">
+            Add/Update Comment
+        </button>
+        <button type="submit" ng-click="deleteComment()">
+            Delete Comment
         </button>
     </form>
 
-    <button type="submit" ng-click="loadComments()" >
+    <p>{{message}}</p>
+
+    <button type="submit" ng-click="loadComments()">
         Load Comments
     </button>
 
-        <table border="1" ng-show="listComments.length > 0">
-            <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>Comment</td>
-                    <td>Date</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="c in listComments">
-                    <td>{{c.id}}</td>
-                    <td>{{c.comment}}</td>
-                    <td>{{c.date}}</td>
-                </tr>
-            </tbody>
-        </table>
+    <table border="1" ng-show="listComments.length > 0">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Comment</td>
+            <td>Date</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="c in listComments">
+            <td>{{c.id}}</td>
+            <td>{{c.comment}}</td>
+            <td>{{c.date}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
